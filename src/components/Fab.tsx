@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import {  View, Text, StyleSheet, TouchableNativeFeedback, Platform, TouchableOpacity } from 'react-native';
 
 interface Props {
     title: string;
@@ -9,19 +9,50 @@ interface Props {
 
 export const Fab = ( {title, onPress, position = 'br'}: Props) => {
 
-  return (
+    const android =  () =>{
+        return (
+            <View 
+            style={[ 
+                styles.fabLocation, 
+                ( position === 'bl') ? styles.left : styles.right
+            ]}>
     
-    <TouchableOpacity
-        style={ position == 'br' ? styles.fabLocationBR:  styles.fabLocationLT }
-        onPress={ onPress }
-        >
-
-        <View style= { styles.fab}>
-            <Text style= { styles.fabText } >{title}</Text>
+            <TouchableNativeFeedback
+               
+                onPress={ onPress }
+                background = { TouchableNativeFeedback.Ripple('#28425B', false, 30)}
+                >
+    
+                <View style= { styles.fab}>
+                    <Text style= { styles.fabText } >{title}</Text>
+                </View>
+                
+            </TouchableNativeFeedback>
         </View>
-        
-    </TouchableOpacity>
-  )
+        )
+    }
+
+    const ios = () =>{
+        return (
+            <TouchableOpacity
+                activeOpacity={ 0.8 }
+                style={[ 
+                    styles.fabLocation, 
+                    ( position === 'bl') ? styles.left : styles.right
+                ]}>
+
+    
+            <View style= { styles.fab}>
+                <Text style= { styles.fabText } >{title}</Text>
+            </View>
+                
+        </TouchableOpacity>
+        )
+    }
+
+
+    return ( Platform.OS === 'ios') ? ios() : android();
+
 }
 
 
@@ -31,7 +62,15 @@ const styles = StyleSheet.create({
         width: 60,
         height:60,
         borderRadius: 100,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 12,
+        },
+        shadowOpacity: 0.58,
+        shadowRadius: 16.00,
+        elevation: 24,
     },
     fabText:{
         color: 'white',
@@ -39,14 +78,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         alignSelf: 'center'
     },
-    fabLocationBR:{
+    fabLocation:{
         position: 'absolute',
-        bottom: 25,
+        bottom: 25
+    },
+    right:{
         right:25
     },
-    fabLocationLT:{
-        position: 'absolute',
-        bottom: 25,
+    left:{
         left:25
     }
 })
