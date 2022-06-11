@@ -14,6 +14,13 @@ export const CounterScreen = () => {
 
         <Fab
             title='+1'
+            onPress= { () => setCounter( counter +1 )}
+            position= 'br'
+        />
+        <Fab
+            title='-1'
+            onPress= { () => setCounter( counter -1 )}
+            position= 'bl'
         />
 
     </View>
